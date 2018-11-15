@@ -1,24 +1,24 @@
 import React, { Component } from 'react';
+import DevTools from 'mobx-react-devtools';
+import { Provider } from 'mobx-react';
 
-import { autorun } from 'mobx';
-
-import TripsStore from './store/TripsStore';
-import TripsApi from './api/TripsApi';
 import './App.css';
 import TripsPage from "./pages/TripsPage";
 
+import tripsStore from './store/TripsStore';
+
+const stores = { tripsStore };
+
 class App extends Component {
-  constructor() {
-    super();
-
-    const store = new TripsStore(new TripsApi());
-
-    this.tripsStore = store;
-  }
 
   render () {
     return (
-      <TripsPage store={this.tripsStore} />
+      <Provider {...stores}>
+        <div>
+          <TripsPage />
+          <DevTools />
+        </div>
+      </Provider>
     )
   }
 }

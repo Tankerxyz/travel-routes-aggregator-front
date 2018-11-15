@@ -1,4 +1,6 @@
-import { observable, decorate } from 'mobx';
+import { observable, decorate, action, has } from 'mobx';
+import { getTomorowDateString } from "../utils";
+import TripsApi from "../api/TripsApi";
 
 class TripsStore {
   trips = [];
@@ -6,20 +8,20 @@ class TripsStore {
   opt = {
     fn: "Кирилловка",
     tn: "Львов",
-    db: (() => {
-        const currentDate = new Date();
-
-        currentDate.setDate(currentDate.getDate() + 1);
-
-        return `15-11-2018` || `${currentDate.getDate()}-${currentDate.getMonth()+1}-${currentDate.getFullYear()}`;
-    })(),
+    db: getTomorowDateString(),
     radius: 300,
-    de: null,
-    hb: null,
+    de: '',
+    hb: '',
   };
 
   constructor(tripsApi) {
     this.tripsApi = tripsApi;
+  }
+
+  changeOptValue(key, value) {
+    if (has(this.opt, key)) {
+      this.opt[key] = value;
+    }
   }
 
   fetchTrips = async () => {
@@ -29,8 +31,12 @@ class TripsStore {
   };
 }
 
-export default decorate(TripsStore, {
+const tripsStore = new (decorate(TripsStore, { // singleton
   trips: observable,
   opt: observable,
   pending: observable,
-});
+  fetchTrips: action,
+}))(new TripsApi());
+
+export default tripsStore;
+export { TripsStore };
