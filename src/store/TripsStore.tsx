@@ -3,7 +3,7 @@ import { getTomorowDateString } from "../utils";
 import TripsApi from "../api/TripsApi";
 
 class TripsStore {
-  @observable trips = [];
+  @observable trips: Array<any> = [];
   @observable pending = false;
   @observable opt: any = {
     fn: "Кирилловка",
@@ -14,7 +14,7 @@ class TripsStore {
     hb: '',
   };
 
-  tripsApi: any;
+  tripsApi: TripsApi;
 
   constructor(tripsApi: any) {
     this.tripsApi = tripsApi;

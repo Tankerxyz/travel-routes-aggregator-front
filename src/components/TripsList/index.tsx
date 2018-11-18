@@ -1,13 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import TripItem from "../TripItem";
 
-class TripsList extends React.Component {
-  static propTypes = {
-    trips: PropTypes.array,
-  };
+import TripItem from "../TripItem/index";
+
+interface IProps {
+  trips: Array<any>,
+}
+
+@observer
+class TripsList extends Component<IProps> {
 
   renderTrips() {
     return this.props.trips.map((trip, index) =>
@@ -35,4 +36,4 @@ class TripsList extends React.Component {
   }
 }
 
-export default observer(TripsList);
+export default TripsList;

@@ -1,7 +1,7 @@
 
 class TripsApi {
 
-  fetchTrips = async (opt) => {
+  fetchTrips = async (opt: any) => {
     return await fetch('/api/trips', {
       method: "POST",
       headers: {

@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-class TripItem extends React.PureComponent {
-  static propTypes = {
-    item: PropTypes.shape({}),
-  };
+interface IProps {
+    item: any
+}
+
+class TripItem extends React.PureComponent<IProps> {
 
   render() {
     const { item } = this.props;

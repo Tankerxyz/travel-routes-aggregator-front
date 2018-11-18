@@ -1,25 +1,32 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 
-import TripsList from '../components/TripsList';
+import TripsList from '../components/TripsList/index';
+import { TripsStore } from '../store/TripsStore';
 
-class TripsPage extends React.Component {
+interface IProps {
+  tripsStore?: TripsStore,
+}
+
+@inject('tripsStore')
+@observer
+class TripsPage extends React.Component<IProps> {
 
   componentDidMount() {
     this.props.tripsStore.fetchTrips();
   }
 
-  onInputChange = () => (e) => {
+  onInputChange = (key: string) => (e: any) => {
     e.persist();
 
-    this.props.tripsStore.changeOptValue(e.target.getAttribute("name"), e.target.value);
+    this.props.tripsStore.changeOptValue(key, e.target.value);
   };
 
-  renderSearchFormInputs = (opt) => {
+  renderSearchFormInputs = (opt: any) => {
     return Object.keys(opt).map((key, i) => (
       <label key={i}>
-        {key.toUpperCase()}
-        <input onChange={this.onInputChange({key})} name={key} value={(() => opt[key])()} />
+        { key.toUpperCase() }
+        <input onChange={this.onInputChange(key)} name={key} value={opt[key]} />
       </label>
     ));
   };
@@ -45,7 +52,7 @@ class TripsPage extends React.Component {
 
         {
           tripsStore.pending
-            ? <marquee style={{width: 100}}>Loading...</marquee> // eslint-disable-line
+            ? <span>Loading...</span> // eslint-disable-line
             : <TripsList trips={tripsStore.trips} />
         }
       </div>
@@ -53,4 +60,4 @@ class TripsPage extends React.Component {
   }
 }
 
-export default inject('tripsStore')(observer(TripsPage));
+export default TripsPage;
