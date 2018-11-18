@@ -1,11 +1,11 @@
-import { observable, decorate, action, has } from 'mobx';
+import { observable, action, has } from 'mobx';
 import { getTomorowDateString } from "../utils";
 import TripsApi from "../api/TripsApi";
 
 class TripsStore {
-  trips = [];
-  pending = false;
-  opt = {
+  @observable trips = [];
+  @observable pending = false;
+  @observable opt: any = {
     fn: "Кирилловка",
     tn: "Львов",
     db: getTomorowDateString(),
@@ -14,16 +14,19 @@ class TripsStore {
     hb: '',
   };
 
-  constructor(tripsApi) {
+  tripsApi: any;
+
+  constructor(tripsApi: any) {
     this.tripsApi = tripsApi;
   }
 
-  changeOptValue(key, value) {
+  changeOptValue(key: string, value: string) {
     if (has(this.opt, key)) {
       this.opt[key] = value;
     }
   }
 
+  @action
   fetchTrips = async () => {
     this.pending = true;
     this.trips = await this.tripsApi.fetchTrips(this.opt);
@@ -31,12 +34,7 @@ class TripsStore {
   };
 }
 
-const tripsStore = new (decorate(TripsStore, { // singleton
-  trips: observable,
-  opt: observable,
-  pending: observable,
-  fetchTrips: action,
-}))(new TripsApi());
+const tripsStore = new TripsStore(new TripsApi());
 
 export default tripsStore;
 export { TripsStore };
